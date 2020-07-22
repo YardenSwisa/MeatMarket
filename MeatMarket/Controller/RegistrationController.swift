@@ -19,7 +19,6 @@ class RegistrationController: UIViewController {
     
     //MARK: Properties
     var databaseRef = Database.database().reference()
-//    var allMeatCuts:[MeatCut]?
     var credits:[String:String]?
     
     //MARK: LifeCycle View
@@ -70,7 +69,7 @@ class RegistrationController: UIViewController {
     }
     
     //MARK: Create User
-    func creatUserWith(firstName:String, lastName:String, email: String, password: String ){
+    fileprivate func creatUserWith(firstName:String, lastName:String, email: String, password: String ){
         Auth.auth().createUser(withEmail: email, password: password) { user, error in
             if let error = error {
                 print("-----Error Creat FireBase User----",error.localizedDescription)

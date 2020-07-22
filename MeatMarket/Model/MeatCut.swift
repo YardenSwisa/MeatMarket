@@ -10,8 +10,6 @@ struct MeatCut: Equatable{
     static func == (lhs: MeatCut, rhs: MeatCut) -> Bool {
         return lhs.recipes == rhs.recipes
     }
-    
-    
     //MARK: Properties
     let id:String
     let name:String

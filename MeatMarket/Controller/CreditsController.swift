@@ -6,11 +6,14 @@
 //  Copyright © 2019 YardenSwisa. All rights reserved.
 //
 
+/// Credits is a credit page for all the recipe i toke from websites online,
+/// all recipe have its own url that open safari at that path.
+/// for  new recipe by users ther is a creator so thay not include in ther.
+
 import UIKit
 import Firebase
 
 class CreditsController: UIViewController, UITableViewDelegate, UITableViewDataSource{
-    
     //MARK: Outlets
     @IBOutlet weak var creditsTableView: UITableView!
         
@@ -44,8 +47,7 @@ class CreditsController: UIViewController, UITableViewDelegate, UITableViewDataS
         return creditsCell
     }
 
-    
-    //MARK: Funcs
+    //MARK: LoadCredits
     func loadCredits(){
         for creditName in credits!.keys{
             creditsArray.append(creditName)

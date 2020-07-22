@@ -8,7 +8,6 @@ import UIKit
 import Firebase
 
 class User: CustomStringConvertible{
-    
     //MARK: Properties
     var id:String?
     var firstName:String?
@@ -24,7 +23,6 @@ class User: CustomStringConvertible{
     
     //MARK: Constructor
     init(){
-        print("User init")
         self.id = nil
         self.firstName = nil
         self.lastName = nil
@@ -104,16 +102,13 @@ class User: CustomStringConvertible{
         }
         if remember != -1{
             self.myRecipes.remove(at: remember)
-
         }
-
     }
     
     //MARK: Set Recipe/ImageUrl
     func setRecipes(favorite:[Recipe], allMyRecipes:[Recipe]){
         self.favoriteRecipes = favorite
         self.myRecipes = allMyRecipes
-        
     }
     func setImageUrl(url:URL?){
         self.image = url

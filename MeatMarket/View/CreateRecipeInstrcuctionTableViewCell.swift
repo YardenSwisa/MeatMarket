@@ -9,20 +9,11 @@
 import UIKit
 
 class CreateRecipeInstrcuctionTableViewCell: UITableViewCell {
-            
     //MARK: Outlets
     @IBOutlet weak var instructionCellLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        
-        setupVisualy()
     }
     
-    func setupVisualy(){
-        instructionCellLabel.textColor = .darkGray
-        contentView.backgroundColor = .clear
-    }
-
 }

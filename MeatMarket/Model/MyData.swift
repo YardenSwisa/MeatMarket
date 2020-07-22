@@ -25,8 +25,6 @@ class MyData{
         self.allMeatCuts = allMeatCuts
         self.allImagesLinks = allImagesLinks
         initRecipeObserverOnce = true
-
-        
     }
     
 }

@@ -17,7 +17,7 @@ protocol MovePopupsDataToCreateRecipe: class {
 
 //MARK: Class
 class PopUpIngredientsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
     //MARK: Outlets
     @IBOutlet weak var ingredientsTV: UITableView!
     @IBOutlet weak var ingredientsTF: UITextField!
@@ -34,16 +34,13 @@ class PopUpIngredientsController: UIViewController, UITableViewDelegate, UITable
         ingredientsTV.delegate = self
         ingredientsTV.dataSource = self
         ingredientsTV.setNoDataMassege(EnterMassege: "Add Ingredients...")
+        
         ingredientsTF.becomeFirstResponder()
-//        ingredientsTF.backgroundColor == UIColor(hex: <#T##String#>)
+        
         textFieldSetup()
         
         self.hideKeyboardWhenTappedAround()
-        
-//        print(userIngredients, "usetIngredients from popVC call from self.ViewDidLoad()")
-
     }
-
     
     //MARK: Actions
     @IBAction func addIngredientTapped(_ sender: UIButton) {
@@ -52,16 +49,15 @@ class PopUpIngredientsController: UIViewController, UITableViewDelegate, UITable
             userIngredients.append(userIngredient)
             
             delegate?.getIngredients(ingredients: userIngredients)
-
+            
             ingredientsTF.text = ""
             ingredientsTF.becomeFirstResponder()
         }else{
             HelperFuncs.showToast(message: "Please enter Ingredient", view: self.view)
         }
         ingredientsTV.reloadData()
-//        print(userIngredients)
     }
-
+    
     
     //MARK: TableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -78,6 +74,7 @@ class PopUpIngredientsController: UIViewController, UITableViewDelegate, UITable
         let finalText = "\(dotStr) \(ingredientsStr)".prefilter(text: dotStr, by: "customOrange")
         //Cell setup
         let cell = tableView.dequeueReusableCell(withIdentifier: "createIngredientsCellID") as! CreateRecipeIngredientsTableViewCell
+        
         cell.backgroundColor = .clear
         cell.labelCell.textColor = .darkGray
         cell.labelCell.attributedText = finalText.prestyled()
@@ -89,7 +86,7 @@ class PopUpIngredientsController: UIViewController, UITableViewDelegate, UITable
     }
     
     // delete in swipe
-     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             userIngredients.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)

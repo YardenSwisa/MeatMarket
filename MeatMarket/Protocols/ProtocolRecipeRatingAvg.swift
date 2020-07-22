@@ -6,6 +6,7 @@
 //  Copyright © 2020 YardenSwisa. All rights reserved.
 //
 
+/// protocol passd the avg rate to RecipesViewController to Cosmos framework that shows the avg recipe at the cell
 import Foundation
 
 protocol RatingProtocol: class {

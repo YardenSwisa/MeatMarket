@@ -16,7 +16,6 @@ class RecipesController: UIViewController, UICollectionViewDelegate, UICollectio
     
     //MARK:Properties
     var allRecipes:[Recipe]?
-//    var allMeatCuts:[MeatCut]?
     var meatCutName = ""
     
     //MARK: LifeCycle View
@@ -25,11 +24,10 @@ class RecipesController: UIViewController, UICollectionViewDelegate, UICollectio
         
         recipeCollectionView.delegate = self
         recipeCollectionView.dataSource = self
+        
         allRecipes!.sort(by: { $0.name.lowercased() < $1.name.lowercased() })
-        for recipe in allRecipes!{
-            meatCutName = recipe.meatcutName!
-            title = "Recipes of \(meatCutName.capitalized)" // need to get meatCutName here
-        }
+        
+        setTitle()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,24 +35,16 @@ class RecipesController: UIViewController, UICollectionViewDelegate, UICollectio
         
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        
-    }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let instructionsVC = segue.destination as? InstructionsController{
             instructionsVC.ratingDelegate = self
+            
             guard let sender = sender as? [String:Any] else {return}
             guard let recipe = sender["recipe"] as? Recipe else {return}
             guard let currentUserRate = sender["currentUserRate"] as? Double else {return}
+            
             instructionsVC.recipe = recipe
-            print(currentUserRate,"yossi")
             instructionsVC.currentUserRate = currentUserRate
-//            print("\(recipe.name)<--- recipe.name RecipeVC")
-            //test
-//            guard let meatcut = sender as? MeatCut else {return}
-//            instructionsVC.meatCut = meatcut
-//            print("\(meatcut.name)<--- meatCut.name RecipeVC")
-//            instructionsVC.ratingDelegate = self
         }
     }
     
@@ -71,24 +61,21 @@ class RecipesController: UIViewController, UICollectionViewDelegate, UICollectio
         for x in 0..<self.allRecipes!.count{
             if recipe.id == self.allRecipes![x].id{
                 self.allRecipes![x].rating = recipe.rating
-                }
             }
-        
+        }
     }
     
-    
-    func updateRates(recipeId:String) -> Double{
-            for i in 0..<MyData.shared.allMeatCuts.count{
-                for x in 0..<MyData.shared.allMeatCuts[i].recipes!.count{
-                    if recipeId == MyData.shared.allMeatCuts[i].recipes![x].id{
-                        return MyData.shared.allMeatCuts[i].recipes![x].rating
-                    }
+    fileprivate func updateRates(recipeId:String) -> Double{
+        for i in 0..<MyData.shared.allMeatCuts.count{
+            for x in 0..<MyData.shared.allMeatCuts[i].recipes!.count{
+                if recipeId == MyData.shared.allMeatCuts[i].recipes![x].id{
+                    return MyData.shared.allMeatCuts[i].recipes![x].rating
                 }
             }
+        }
         
         return 0.0
     }
-    
     
     //MARK: CollectionView
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -100,18 +87,13 @@ class RecipesController: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let recipeCell = collectionView.dequeueReusableCell(withReuseIdentifier: "recipeCellID", for: indexPath) as! RecipeViewCell
         var recipe = allRecipes![indexPath.row]
         let rate = updateRates(recipeId: recipe.id)
+        
         recipe.rating = rate
         recipeCell.populate(recipe: recipe)
-//        print(recipe.rating, "rate")
-//        print(updateRates(recipeId: recipe.id),"method rate")
         recipeCell.vc = self
-//        recipeCell.layer.borderWidth = 1
-//        recipeCell.layer.borderColor = #colorLiteral(red: 0.9450980392, green: 0.6, blue: 0.3254901961, alpha: 1)
-//        recipeCell.rating.rating = updateRates(recipeId: recipe.id)
         
         return recipeCell
     }
@@ -126,15 +108,15 @@ class RecipesController: UIViewController, UICollectionViewDelegate, UICollectio
                 dic["currentUserRate"] = 1.0
             }
             self.performSegue(withIdentifier: "recipesToInstructions", sender: dic)
-
+            
         }) { (Error) in
             print("didnt rate", "yossiprint")
             self.performSegue(withIdentifier: "recipesToInstructions", sender: dic)
-
+            
         }
     }
     
-    func cellVisuality(){
+    fileprivate func cellVisuality(){
         let cellSize = CGSize(width:recipeCollectionView.bounds.width * 0.9, height:recipeCollectionView.bounds.height * 0.40
         )
         let layout = UICollectionViewFlowLayout()
@@ -148,6 +130,12 @@ class RecipesController: UIViewController, UICollectionViewDelegate, UICollectio
         recipeCollectionView.reloadData()
     }
     
+    fileprivate func setTitle() {
+        for recipe in allRecipes!{
+            meatCutName = recipe.meatcutName!
+            title = "Recipes of \(meatCutName.capitalized)"
+        }
+    }
 }
 
 

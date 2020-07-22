@@ -12,8 +12,6 @@ import Firebase
 
 class LoginController: UIViewController {
     //MARK: Properties
-//    var allMeatCuts:[MeatCut]?
-//    var allRecipesURL:[String:URL]?
     var credits:[String:String]?
     
     //MARK: Outlets
@@ -32,22 +30,21 @@ class LoginController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navigationVC = segue.destination as? NavigationController{
             guard let dictionary = sender as? [String:Any] else {return}
-//            navigationVC.allMeatCuts = dictionary["meatCuts"] as? [MeatCut]
-//            MyData.shared.configure(allMeatCuts: dictionary["meatCuts"] as! [MeatCut], allImagesLinks: [])
-
-//            navigationVC.allRecipesURL = dictionary["allRecipesURL"] as? [String:URL]
+            
             navigationVC.credits = dictionary["credits"] as? [String:String]
         }
         
         if let registerVC = segue.destination as? RegistrationController{
             guard let dictionary = sender as? [String:Any] else {return}
+            
             MyData.shared.configure(allMeatCuts: dictionary["meatCuts"] as! [MeatCut], allImagesLinks: [])
 
-//            registerVC.allMeatCuts = (dictionary["meatCuts"] as! [MeatCut])
             registerVC.credits = dictionary["credits"] as? [String:String]
             
         }
     }
+    
+    
     
     //MARK: Actions
     @IBAction func loginTapped(_ sender: UIButton) {
@@ -67,12 +64,15 @@ class LoginController: UIViewController {
     @IBAction func regiserTapped(_ sender: UIButton) {
         sender.layer.cornerRadius = 10
         sender.backgroundColor = UIColor(hex: "#FFCDB2")
+        
         let dic:[String:Any] = ["meatCuts":[], "credits": self.credits!]
+        
         self.performSegue(withIdentifier: "loginToRegistration", sender: dic)
     }
     
-    //MARK: Login with firebase
     
+    
+    //MARK: Login with firebase
     func loginWithFireBase(){
         guard
             let email = emailField.text,

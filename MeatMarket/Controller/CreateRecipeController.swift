@@ -6,61 +6,16 @@
 //  Copyright © 2020 YardenSwisa. All rights reserved.
 //
 
-/*
-    DELETE FROM SERVER:
- - ALLRECIPES
- - RECIPES
- - MY RECIPES
- -  STORAGE
- - userate
- */
+/// Create a recipe and share it with the rest of the users,
+/// you need to specific a meatcut and for that meatcut create a recipe.
+/// the recipe get creatorID that can recognaze the user that create them
 
 import UIKit
 import Firebase
 
-//MARK:  Extension Delegate
-extension CreateRecipeController: MovePopupsDataToCreateRecipe{
-    func getIngredients(ingredients: [String]) {
-        userRecipeIngredients = ingredients
-        ingredientsCheckIV.image = checkImage
-    }
-    
-    func getInstructions(instructions: [String]) {
-        
-        userRecipeInstructions = instructions
-        instructionsCheckIV.image = checkImage
-        print(userRecipeInstructions,"UserInstructions")
-    }
-    
-}
-
-//MARK: Extension UIPicker
-extension CreateRecipeController: UIPickerViewDelegate, UIPickerViewDataSource{
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return allMeatCuts!.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        userRecipeMeatCut = allMeatCuts![row].name
-        idPickerMeatCut = allMeatCuts![row].id
-        
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return allMeatCuts![row].name
-    }
-    
-}
-
 //MARK: Class 
 class CreateRecipeController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
-    
-    //MARK: Outlets
+        //MARK: Outlets
     @IBOutlet weak var meatCutPicker: UIPickerView!
     @IBOutlet weak var recipeNameTF: UITextField!
     @IBOutlet weak var levelSegment: UISegmentedControl!
@@ -73,8 +28,7 @@ class CreateRecipeController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var createRecipeBtn: UIButton!
     @IBOutlet weak var recipeTimePicker: UIDatePicker!
     
-    
-    //MARK: Properties
+        //MARK: Properties
     var allMeatCuts:[MeatCut]?
     var userRecipeMeatCut = ""
     var userRecipeLevel:Levels = .EASY
@@ -92,31 +46,27 @@ class CreateRecipeController: UIViewController, UIImagePickerControllerDelegate,
         meatCutPicker.delegate = self
         meatCutPicker.dataSource = self
         
-        setupTimePicker(minuteInterval: 5)
+        setupTimePicker(minuteInterval: 1)
         
         self.observeKeybordForPushUpTheView()
         self.hideKeyboardWhenTappedAround()
         
-        
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        print("viewWillAppear() CreatRecipeVC")
         createRecipeBtn.layer.cornerRadius = 8
-
         
     }
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "ingredientsCreateID"){
             let displayVC = segue.destination as! PopUpIngredientsController
-            displayVC.delegate = self
             
+            displayVC.delegate = self
             displayVC.userIngredients = userRecipeIngredients
         }
         
         if(segue.identifier == "instructionsCreateID"){
             let displayVC = segue.destination as! PopUpInstructionsController
+
             displayVC.delegateUserInstruction = self
-            
             displayVC.userInstructions = userRecipeInstructions
         }
     }
@@ -182,7 +132,6 @@ class CreateRecipeController: UIViewController, UIImagePickerControllerDelegate,
         if userRecipeMeatCut.isEmpty{
             userRecipeMeatCut = allMeatCuts![0].name
             idPickerMeatCut = allMeatCuts![0].id
-            print(userRecipeMeatCut, idPickerMeatCut)
         }else if recipeNameTF.text!.isEmpty{
             HelperFuncs.showToast(message: "Please enter recipe Name", view: view)
         }else if Double(userTimeRecipe) == 1.0{
@@ -194,7 +143,7 @@ class CreateRecipeController: UIViewController, UIImagePickerControllerDelegate,
         }else if userRecipeInstructions.isEmpty{
             HelperFuncs.showToast(message: "Please enter recipe Instructions", view: view)
         }else{
-            //create user recipe and update the database
+            //create user recipe
             guard let autoKeyForRecipe = databaseRef.child("AllRecipes").childByAutoId().key else{return}
             let userRecipe = Recipe(
                                     id: autoKeyForRecipe,
@@ -235,7 +184,7 @@ class CreateRecipeController: UIViewController, UIImagePickerControllerDelegate,
                     HelperFuncs.showToast(message: error!.localizedDescription, view: self.view)
                     return
                 }else{
-                                //upload recipe to database
+                    //upload recipe to database
                     databaseRef.child("AllRecipes").child(autoKeyForRecipe).setValue(postRecipe)
                     databaseRef.child("Recipes").child(self.idPickerMeatCut).updateChildValues([autoKeyForRecipe : "x"])
                     databaseRef.child("MyRecipes").child(currentUser.id!).updateChildValues([autoKeyForRecipe : "x"])
@@ -246,11 +195,11 @@ class CreateRecipeController: UIViewController, UIImagePickerControllerDelegate,
                     self.resetAllTheFields()
                 }
             }
-
         }
-        
-        
     }
+    
+    
+    
     
     //MARK: Time Picker
     fileprivate func setupTimePicker(minuteInterval: Int){
@@ -259,9 +208,11 @@ class CreateRecipeController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     //MARK: image recipe
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         let image = info[.originalImage] as! UIImage
+        
         recipeImageURL = (info[.imageURL] as! URL)
         recipeImageIV.image = image
         userRecipeImage = image
@@ -275,10 +226,10 @@ class CreateRecipeController: UIViewController, UIImagePickerControllerDelegate,
         recipeNameTF.text = ""
         levelSegment.selectedSegmentIndex = 0
         recipeTimePicker.countDownDuration = 1.0
+        recipeImageIV.image = nil
         recipeImageCheckIV.image = nil
         ingredientsCheckIV.image = nil
         instructionsCheckIV.image = nil
-        recipeImageIV.image = nil
         
         userRecipeMeatCut = allMeatCuts![0].name
         userRecipeLevel = .EASY
@@ -302,14 +253,49 @@ class CreateRecipeController: UIViewController, UIImagePickerControllerDelegate,
                 return
             }
         }
+    }
+    
+    
+}
+
+/// Extentions for the Data shared with the Instructions and Ingredients views and for the Picker
+
+//MARK:  Extension Delegate
+extension CreateRecipeController: MovePopupsDataToCreateRecipe{
+    func getIngredients(ingredients: [String]) {
+        userRecipeIngredients = ingredients
+        ingredientsCheckIV.image = checkImage
+    }
+    
+    func getInstructions(instructions: [String]) {
         
-        
+        userRecipeInstructions = instructions
+        instructionsCheckIV.image = checkImage
+        print(userRecipeInstructions,"UserInstructions")
     }
     
 }
 
-
-
+//MARK: Extension UIPicker
+extension CreateRecipeController: UIPickerViewDelegate, UIPickerViewDataSource{
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return allMeatCuts!.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        userRecipeMeatCut = allMeatCuts![row].name
+        idPickerMeatCut = allMeatCuts![row].id
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return allMeatCuts![row].name
+    }
+    
+}
 
 
 

@@ -11,7 +11,6 @@ import Firebase
 import Cosmos
 
 class RecipeViewCell: RoundedCollectionViewCell , RecipeCellFavoriteStatusDelegate{
-    
     //MARK:Outlets
     @IBOutlet weak var recipeLevelCell: UILabel!
     @IBOutlet weak var recipeTimeCell: UILabel!
@@ -28,32 +27,27 @@ class RecipeViewCell: RoundedCollectionViewCell , RecipeCellFavoriteStatusDelega
     
     //MARK: Actions
     @IBAction func favoriteBtnTapped(_ sender: UIButton) {
-//        if once!{
-//            once = false
-            if !isFavorite!{
-                CurrentUser.shared.addToFavorite(recipe: recipe!, vc: vc!,delegate: self)
-                changeStar(full: true)
-            }else{
-                CurrentUser.shared.removeFromFavorite(recipe: recipe!, vc: vc!,delegate: self)
-//                CurrentUser.shared.removeFromFavorites(recipeId: recipe!.id)
-                changeStar(full: false)
-            }
-            isFavorite = !isFavorite!
-//        }
+        if !isFavorite!{
+            CurrentUser.shared.addToFavorite(recipe: recipe!, vc: vc!,delegate: self)
+            changeStar(full: true)
+        }else{
+            CurrentUser.shared.removeFromFavorite(recipe: recipe!, vc: vc!,delegate: self)
+            changeStar(full: false)
+        }
+        isFavorite = !isFavorite!
     }
     
     //MARK: Funcs
     func populate(recipe:Recipe){
+        isFavorite = false
         self.recipe = recipe
         self.once = true
+        self.rating.rating = recipe.rating
         
-        isFavorite = false
         recipeLevelCell.text = recipe.level.description
         recipeTimeCell.text = "\(timeString(time: TimeInterval(Double(recipe.time) ?? 0)))"
         recipeNameCell.text = recipe.name
-       
         recipeImageCell.layer.cornerRadius = 10
-        self.rating.rating = recipe.rating
         recipeImageCell.sd_setImage(with: recipe.image ?? nil)
         
         for favorite in CurrentUser.shared.user!.favoriteRecipes{
@@ -77,11 +71,11 @@ class RecipeViewCell: RoundedCollectionViewCell , RecipeCellFavoriteStatusDelega
     }
     
     func timeString(time: TimeInterval) -> String {
-         let hour = Int(time) / 3600
-         let minute = Int(time) / 60 % 60
-         let second = Int(time) % 60
-
-         return String(format: "%02i:%02i:%02i", hour, minute, second)
-     }
+        let hour = Int(time) / 3600
+        let minute = Int(time) / 60 % 60
+        let second = Int(time) % 60
+        
+        return String(format: "%02i:%02i:%02i", hour, minute, second)
+    }
 }
 

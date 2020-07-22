@@ -6,48 +6,43 @@
 //  Copyright © 2019 YardenSwisa. All rights reserved.
 //
 
+/// observing on all meatcuts to see if add/remove  and updates its own meatcut.recipes
+
 import UIKit
 import SDWebImage
 import Firebase
 
-//MARK: Global Propertie 
-//var globalOnce = true
-
 class MainScreenController: UIViewController{
-    
     //MARK: Properties
     var allMeatCuts:[MeatCut]?
     
-    
-
     //MARK: LifeCycle
     override func viewDidLoad() {
         print("MainScreen viewDidLoad")
         super.viewDidLoad()
+        
         if MyData.shared.initRecipeObserverOnce{
             print("starting to observe")
             MyData.shared.initRecipeObserverOnce = false
             allRecipesObserve()
         }
-        
-
     }
     override func viewWillAppear(_ animated: Bool) {
         self.allMeatCuts = MyData.shared.allMeatCuts
-        print("MainScreen viewWillAppear")
 
         self.allMeatCuts!.sort(by: { $0.name.lowercased() < $1.name.lowercased() })
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if let recipesVC = segue.destination as? RecipesController{
             guard let recipes = sender as? [Recipe] else {return}
+            
             recipesVC.allRecipes = recipes
             print("finish MainScreen move to RecipesVC")
         }
         if let createRecipeVC = segue.destination as? CreateRecipeController{
             guard let allMeatCuts = sender as? [MeatCut] else {return}
+            
             createRecipeVC.allMeatCuts = allMeatCuts
             print("finish MainScreen move to CreateRecipeVC")
         }
@@ -85,9 +80,6 @@ class MainScreenController: UIViewController{
         self.performSegue(withIdentifier: "meatCutsToRecipes", sender: allMeatCuts![9].recipes)
     }
 
- 
-    
-    
     //MARK: Recipes Observe
     func allRecipesObserve(){
         let allRecipesRef = FirebaseDatabase.Database.database().reference().child("AllRecipes")
@@ -96,18 +88,15 @@ class MainScreenController: UIViewController{
         
         allRecipesRef.observe(.value) { (allRecipesData) in
             let allRecipes = allRecipesData.value as! [String:Any?]
-            var countRecipes = 0 //test
-            print("observing recipes live now")
+
             for recipeId in allRecipes.keys{
-                countRecipes += 1 //test
                 
                 usersRateRef.child(recipeId).observeSingleEvent(of: .value) { (ratingsData) in
                     var ratingsAvg = 0.0
+                    
                     ratingsAvg = HelperFuncs.calculateRecipeRating(ratingsData: ratingsData)
-                    print(ratingsAvg)
                     allRecipesRef.child(recipeId).observeSingleEvent(of: .value) { (DataSnapshot) in
                         let data = DataSnapshot.value as! [String:Any?]
-
                         var recipe = Recipe(
                             id: data["id"] as! String,
                             name: data["name"] as! String,
@@ -126,19 +115,14 @@ class MainScreenController: UIViewController{
                             if URL != nil{
                                 recipe.image = URL!
 
-                                if self.checkRecipeInAllMeatCuts(checkRecipe: recipe){
-                                    print("already exist in allMeatCuts")
-                                }else{
-                                    print("New Recipe Found")
+                                if !self.checkRecipeInAllMeatCuts(checkRecipe: recipe){
                                     for i in 0..<MyData.shared.allMeatCuts.count{
                                         if MyData.shared.allMeatCuts[i].id == recipe.meatcutID{
                                             MyData.shared.allMeatCuts[i].recipes!.append(recipe)
                                             self.allMeatCuts = MyData.shared.allMeatCuts
-                                            print("New Recipe Added to allMeatCuts")
                                         }
                                     }
                                 }
-                                                                
                             }
                             if error != nil{
                                 print(error!.localizedDescription)
@@ -153,15 +137,16 @@ class MainScreenController: UIViewController{
     //MARK: Check if recipe in allMeatCut
     func checkRecipeInAllMeatCuts(checkRecipe: Recipe)-> Bool{
         var isRecipeExist = false
+        
         for meatcut in allMeatCuts!{
             for recipe in meatcut.recipes!{
                 if checkRecipe.id == recipe.id{
-//                    print(checkRecipe.id , checkRecipe.name, recipe.id , recipe.name , meatcut.name)
                     isRecipeExist = true
                     return isRecipeExist
                 }
             }
         }
+        
         return isRecipeExist
     }
     
@@ -172,10 +157,7 @@ class MainScreenController: UIViewController{
                     if checkRecipe.id == MyData.shared.allMeatCuts[i].recipes![x].id{
                     }
                 }
-                
             }
-
         }
     }
-
 }

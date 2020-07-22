@@ -6,12 +6,14 @@
 //  Copyright © 2019 YardenSwisa. All rights reserved.
 //
 
+/// InstructionsController is the Recipe in details like rate, name, instruction , ingredients etc..
+/// here i get the user rate and update the stars to the user rate, with avg rating on the side
+
 import UIKit
 import SDWebImage
 import Cosmos
 import Firebase
 import Prestyler
-
 
 class InstructionsController: UIViewController, UITableViewDelegate , UITableViewDataSource{
     //MARK: Outlets
@@ -21,6 +23,7 @@ class InstructionsController: UIViewController, UITableViewDelegate , UITableVie
     @IBOutlet weak var ratingBar: CosmosView!
     
     //MARK: Properties
+    var allMeatcuts = MyData.shared.allMeatCuts
     var recipe:Recipe?
     var meatCut:MeatCut?
     let dataBaseRef = Database.database().reference()
@@ -41,19 +44,10 @@ class InstructionsController: UIViewController, UITableViewDelegate , UITableVie
         setBarRatingWithRecipeRate()
         ratingBarTapped()
     }
-
     
     override func viewWillAppear(_ animated: Bool) {
-        titleName = recipe!.name
-        self.navigationItem.title = titleName
-        ingredientsTableView.layer.cornerRadius = 8
-        instructionsTableView.layer.cornerRadius = 8
-        setImageRecipe()
-        //Prestler colors
-        Prestyler.defineRule("^", "#CF5C36")
-
-
-     }
+        setVisualProperties()
+    }
     
     //MARK: TableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -86,11 +80,11 @@ class InstructionsController: UIViewController, UITableViewDelegate , UITableVie
             let preNum = "\(counterArray[indexPath.row + 1]).".prefilter(type: .numbers, by: "^").prefilter(text: ".", by: "^")
             let instructionsStr = "\(recipe?.instructions[indexPath.row] ?? "No Instructions")"
             let finalInstructionsText = "\(preNum) \(instructionsStr)"
-
+            
             //Cell setup
             let instructionsCell = tableView.dequeueReusableCell(withIdentifier: "InstructionsCellID") as! InstructionsTableViewCell
             instructionsCell.instructionLable.attributedText =  finalInstructionsText.prestyled()
-
+            
             return instructionsCell
         }
     }
@@ -109,48 +103,50 @@ class InstructionsController: UIViewController, UITableViewDelegate , UITableVie
     }
     
     fileprivate func ratingBarTapped() {
-        // rating stars was tapped
         ratingBar.didTouchCosmos = { userRate in
-            //TODO: save the rate of the user at the recipe.
             self.writeUsersRateToDatabase(userRating: userRate)
             HelperFuncs.showToast(message: "You Rate \(String(format: "%.1f", userRate))", view: self.view)
         }
     }
     
     //MARK: Write Rate to Database
-    func writeUsersRateToDatabase(userRating: Double){
+    fileprivate func writeUsersRateToDatabase(userRating: Double){
         guard let currentUserID = CurrentUser.shared.user?.id else {return}
         guard let recipe = recipe else {return}
         var currentRecipe = recipe
         let userRate = Double(String(format: "%.1f", userRating))
-       
+        
         dataBaseRef.child("UsersRate").child(recipe.id).child(currentUserID).setValue(userRate)
         dataBaseRef.child("UsersRate").child(recipe.id).observeSingleEvent(of: .value) { (ratingsData) in
             var ratingsAvg = 0.0
-
+            
             ratingsAvg = HelperFuncs.calculateRecipeRating(ratingsData: ratingsData)
             self.ratingBar.text = "(\(ratingsAvg) Avg)"
-
-//            if let navigationVC = self.navigationController as? NavigationController {
-                for i in 0..<MyData.shared.allMeatCuts.count{
-                    for x in 0..<MyData.shared.allMeatCuts[i].recipes!.count{
-                        if recipe.id == MyData.shared.allMeatCuts[i].recipes![x].id{
-                            MyData.shared.allMeatCuts[i].recipes![x].rating = ratingsAvg
-                            print("rating avg is done! avg is \(ratingsAvg)")
-                            
-                            if (self.ratingDelegate != nil){
-                                currentRecipe.rating = ratingsAvg
-                                self.ratingDelegate?.ratingAverage(recipe: currentRecipe)
-                            }
+            
+            for i in 0 ..< self.allMeatcuts.count{
+                for x in 0 ..< self.allMeatcuts[i].recipes!.count{
+                    if recipe.id == self.allMeatcuts[i].recipes![x].id{
+                        self.allMeatcuts[i].recipes![x].rating = ratingsAvg
+                        print("rating avg is done! avg is \(ratingsAvg)")
+                        
+                        if (self.ratingDelegate != nil){
+                            currentRecipe.rating = ratingsAvg
+                            self.ratingDelegate?.ratingAverage(recipe: currentRecipe)
                         }
                     }
-//                }
+                }
             }
-            
         }
-        
     }
-
     
-    
+    //MARK: set Visual Properties
+    fileprivate func setVisualProperties() {
+        titleName = recipe!.name
+        self.navigationItem.title = titleName
+        ingredientsTableView.layer.cornerRadius = 8
+        instructionsTableView.layer.cornerRadius = 8
+        setImageRecipe()
+        //Prestler colors
+        Prestyler.defineRule("^", "#CF5C36")
+    }
 }

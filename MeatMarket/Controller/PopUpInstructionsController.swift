@@ -9,7 +9,6 @@
 import UIKit
 import Prestyler
 
-
 //MARK: Class
 class PopUpInstructionsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -22,24 +21,19 @@ class PopUpInstructionsController: UIViewController, UITableViewDelegate, UITabl
     var userInstructions:[String] = []
     weak var delegateUserInstruction: MovePopupsDataToCreateRecipe?
     
-    
     //MARK: LifeSycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         instructionsTV.delegate = self
         instructionsTV.dataSource = self
-        
         instructionsTV.setNoDataMassege(EnterMassege: "Add Instruction...")
 
         instructionTF.becomeFirstResponder()
-//        instructionTF.backgroundColor = UIColor(hex: "#FFCDB2")
+
         textFieldSetup()
    
         self.hideKeyboardWhenTappedAround()
-        
-//        print(testInstructions,"test instructions")
-                
     }
     
     //MARK: Actions
@@ -50,14 +44,12 @@ class PopUpInstructionsController: UIViewController, UITableViewDelegate, UITabl
             
             delegateUserInstruction?.getInstructions(instructions: userInstructions)
             
-//            print(userInstructions)
             instructionTF.text = ""
             instructionTF.becomeFirstResponder()
         }else{
             HelperFuncs.showToast(message: "Please enter Instraction", view: self.view)
         }
         instructionsTV.reloadData()
-//        print(userInstructions)
     }
     
     
@@ -80,6 +72,7 @@ class PopUpInstructionsController: UIViewController, UITableViewDelegate, UITabl
         let finalText = "\(preNum) \(instructionsStr)"
 //        Cell setup
         let cell = tableView.dequeueReusableCell(withIdentifier: "createInstructionsCellID") as! CreateRecipeInstrcuctionTableViewCell
+        
         cell.backgroundColor = .clear
         cell.instructionCellLabel?.textColor = .darkGray
         cell.instructionCellLabel?.attributedText = finalText.prestyled()
@@ -87,10 +80,9 @@ class PopUpInstructionsController: UIViewController, UITableViewDelegate, UITabl
         instructionsTV.removeNoDataMassege()
         instructionsTV.setNoDataMassege(EnterMassege: "To Remove Instruction Swipe Left")
 
-        //test
-//        cell.textLabel?.text = testInstructions[indexPath.row]
         return cell
     }
+    
     // delete in swipe
      func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
