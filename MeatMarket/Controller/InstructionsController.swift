@@ -98,14 +98,14 @@ class InstructionsController: UIViewController, UITableViewDelegate , UITableVie
     //MARK: imageRecipe and barRating
     fileprivate func setImageRecipe() {
         recipeImage.layer.cornerRadius = 8
-        recipeImage.sd_setImage(with: recipe?.image)
+        recipeImage.sd_setImage(with: recipe!.image)
     }
     
     fileprivate func setBarRatingWithRecipeRate() {
         let recipeRate = self.recipe!.rating
         
         self.ratingBar.text = "(\(recipeRate) Avg)"
-        ratingBar.rating = currentUserRate!
+        ratingBar.rating = currentUserRate ?? 1.0
     }
     
     fileprivate func ratingBarTapped() {

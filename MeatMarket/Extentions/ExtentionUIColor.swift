@@ -10,7 +10,7 @@ import UIKit
 
 extension UIColor {
     
-    //MARK: Add Hex
+    //MARK: Add Hex color
     public convenience init?(hex: String) {
         let r, g, b, a: CGFloat
 

@@ -6,8 +6,8 @@
 //  Copyright © 2020 YardenSwisa. All rights reserved.
 //
 
+/// Protocols for remove recipe from my Favorite and from My Recipes(that i made)
 import Foundation
-
 
 protocol RemoveFavoriteProtocol {
     func removeFavorite(recipeId:String)
@@ -16,8 +16,3 @@ protocol RemoveFavoriteProtocol {
 protocol RemoveMyRecipeProtocol{
     func removeMyRecipe(recipeId:String)
 }
-
-//protocol RemoveRecipe {
-//    func removeFavoritesRecipe(recipeId: String)
-//    func removeMyRecipes(recipeId: String)
-//}

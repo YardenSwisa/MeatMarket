@@ -60,7 +60,7 @@ class SplashScreenController: UIViewController {
             MyData.shared.allMeatCuts = dictionary["meatCuts"] as! [MeatCut]
 
 //            loginVC.allMeatCuts = dictionary["meatCuts"] as? [MeatCut]
-            loginVC.allRecipesURL = dictionary["allRecipesURL"] as? [String:URL]
+//            loginVC.allRecipesURL = dictionary["allRecipesURL"] as? [String:URL]
             loginVC.credits = dictionary["credits"] as? [String:String]
             
             print("SplashScreen finish, loading LoginVC")
@@ -258,18 +258,19 @@ class SplashScreenController: UIViewController {
         if Auth.auth().currentUser != nil {
 //            guard let userID = CurrentUser.shared.user?.id else { return  }
             self.once = false
+            MyData.shared.allMeatCuts = meatCuts
             CurrentUser.shared.configure(
                 userId: Auth.auth().currentUser!.uid,
                 segueId: "splashScreenToNavigation",
                 meatCuts: meatCuts,
-                allRecipesURL: allRecipesURL, // test
+//                allRecipesURL: allRecipesURL, // test
                 vc: self,
                 credits: credits)
         }else{
             self.once = false
             let dic:[String:Any] = [
                 "meatCuts": meatCuts,
-                "allRecipesURL": allRecipesURL,// test
+//                "allRecipesURL": allRecipesURL,// test
                 "credits": credits ]
             self.performSegue(withIdentifier: "splashScreenToLogin", sender: dic)
         }

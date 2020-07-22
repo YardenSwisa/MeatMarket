@@ -268,7 +268,18 @@ class ProfileController: UIViewController, UICollectionViewDataSource,UICollecti
                 }
             }
         }
+
     }
+//    URLSession.shared.dataTask(with: CurrentUser.shared.user!.image!) { (data, _, error) in
+//        guard let data = data, error == nil else {return}
+//           DispatchQueue.main.async() {
+//               let image = UIImage(data: data)
+//               self.profileImageView.image = image!.circleMasked
+//           }
+//    }.resume()
+//    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?)->()){
+//        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+//    }
     
 }
 

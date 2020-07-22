@@ -13,7 +13,7 @@ import Firebase
 class LoginController: UIViewController {
     //MARK: Properties
 //    var allMeatCuts:[MeatCut]?
-    var allRecipesURL:[String:URL]?
+//    var allRecipesURL:[String:URL]?
     var credits:[String:String]?
     
     //MARK: Outlets
@@ -90,7 +90,7 @@ class LoginController: UIViewController {
                 self.present(alert, animated: true, completion: nil)
             }else{
                 //MARK: Check user - Mydata
-                CurrentUser.shared.configure(userId: Auth.auth().currentUser!.uid, segueId: "loginToNavigation", meatCuts: MyData.shared.allMeatCuts, allRecipesURL: self.allRecipesURL!, vc: self,credits: self.credits!) //added myRecipes
+                CurrentUser.shared.configure(userId: Auth.auth().currentUser!.uid, segueId: "loginToNavigation", meatCuts: MyData.shared.allMeatCuts, vc: self,credits: self.credits!) 
             }
         }
     }

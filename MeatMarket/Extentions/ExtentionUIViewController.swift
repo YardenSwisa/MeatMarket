@@ -22,13 +22,13 @@ extension UIViewController {
         view.endEditing(true)
     }
     
+    
     //MARK: Observer on keybord, if its came out the view push up with him
     func observeKeybordForPushUpTheView() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-    
-    //MARK: Keyboard show/hide
+    //MARK: Objc func for the Observer, Keyboard show/hide
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0 {
@@ -37,7 +37,6 @@ extension UIViewController {
             }
         }
     }
-    
     @objc func keyboardWillHide(notification: NSNotification) {
         if self.view.frame.origin.y != 0 {
             self.view.frame.origin.y = 0

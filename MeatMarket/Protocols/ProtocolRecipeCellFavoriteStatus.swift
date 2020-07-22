@@ -6,6 +6,7 @@
 //  Copyright © 2020 YardenSwisa. All rights reserved.
 //
 
+/// change the status of the Star image(RecipeViewCell) for add/remove from favorite
 import Foundation
 
 protocol RecipeCellFavoriteStatusDelegate {

@@ -11,13 +11,12 @@ import SDWebImage
 import Firebase
 
 //MARK: Global Propertie 
-var globalOnce = true
+//var globalOnce = true
 
 class MainScreenController: UIViewController{
     
     //MARK: Properties
     var allMeatCuts:[MeatCut]?
-//    var once = true
     
     
 
@@ -31,23 +30,12 @@ class MainScreenController: UIViewController{
             allRecipesObserve()
         }
         
-//        print(CurrentUser.shared.user?.myRecipes ?? "none","Main myRecipes")
 
     }
     override func viewWillAppear(_ animated: Bool) {
         self.allMeatCuts = MyData.shared.allMeatCuts
         print("MainScreen viewWillAppear")
-//        self.liveRating()
-//        if let navigationVC = self.navigationController as? NavigationController{
-//            self.allMeatCuts = navigationVC.allMeatCuts
-//            self.liveRating(navigationVC:navigationVC)
-//        }
-//        print(allMeatCuts?.count,"test yossi")
-        
-//        print("viewWillAppear() mainScreen")
-//        if let pageRootController = self.parent as? PageRootController{
-//            pageRootController.loadAndSortMeatCutsMainVC()
-//        }
+
         self.allMeatCuts!.sort(by: { $0.name.lowercased() < $1.name.lowercased() })
     }
     
@@ -56,8 +44,6 @@ class MainScreenController: UIViewController{
         if let recipesVC = segue.destination as? RecipesController{
             guard let recipes = sender as? [Recipe] else {return}
             recipesVC.allRecipes = recipes
-//            guard let meatCuts = sender as? [MeatCut] else {return}
-//            recipesVC.allMeatCuts = meatCuts
             print("finish MainScreen move to RecipesVC")
         }
         if let createRecipeVC = segue.destination as? CreateRecipeController{
@@ -99,42 +85,7 @@ class MainScreenController: UIViewController{
         self.performSegue(withIdentifier: "meatCutsToRecipes", sender: allMeatCuts![9].recipes)
     }
 
-//    //MARK: Live Rating
-//    func liveRating(){
-//        print("MainScreen liveRating func")
-////        if globalOnce{
-////            globalOnce = false
-//            let dataRef = Database.database().reference()
-//            
-//            for i in 0..<MyData.shared.allMeatCuts.count{
-//                for x in 0..<MyData.shared.allMeatCuts[i].recipes!.count{
-//                    let recipe = MyData.shared.allMeatCuts[i].recipes![x]
-//                    dataRef.child("UsersRate").child(recipe.id).observe(.value) { (ratingsData) in
-//                        var ratingsAvg = 0.0
-//                        ratingsAvg = HelperFuncs.calculateRecipeRating(ratingsData: ratingsData)
-//
-//                        MyData.shared.allMeatCuts[i].recipes![x].rating = ratingsAvg
-//                    } //observer
-//                }// for recipe
-//            }// for meatcut
-////        }
-//    }
-//    
-    //MARK: meatCuts Observer
-
-    func observeMeatCuts(){
-        let dbRef = Database.database().reference()
-//        dbRef.child("MeatCuts").observeSingleEvent(of: .value) { (meatCutsSnapShot) in
-//            let meatcuts = meatCutsSnapShot.value as! [String:Any?]
-//            for meatcutId in meatcuts.keys{
-//                dbRef.child(<#T##pathString: String##String#>)
-//            }
-//        }
-        dbRef.child("Recipes").observe(.childAdded) { (DataSnapshot) in
-            
-//            print(DataSnapshot.key.count,"childadded")
-        }
-    }
+ 
     
     
     //MARK: Recipes Observe
@@ -170,15 +121,11 @@ class MainScreenController: UIViewController{
                             creator: data["creator"] as? String ?? nil,
                             meatcutID: data["meatcutID"] as! String,
                             meatcutName: data["meatcutName"] as? String)
-                        //self.myRecipes[meatCutID]!.append(recipe)
-                            print(recipe,"")
-                        print(self.checkRecipeInAllMeatCuts(checkRecipe: recipe), "looking for false")
+
                         storageRecipesRef.child("\(recipe.id).jpeg").downloadURL {(URL, error) in
                             if URL != nil{
                                 recipe.image = URL!
-                                //here i have the recipe.
-                                // add methotd that checks if the recipe exists in all Meat cuts and returns true/false
-                                // use the mthod here checking the recipe id and if the recipe id doesnt exist in all meatcuts then manually add here this recipe to the relevant place in the all meatcuts.
+
                                 if self.checkRecipeInAllMeatCuts(checkRecipe: recipe){
                                     print("already exist in allMeatCuts")
                                 }else{
@@ -191,10 +138,7 @@ class MainScreenController: UIViewController{
                                         }
                                     }
                                 }
-                                
-                                // if one recipe miss on the server
-                                
-
+                                                                
                             }
                             if error != nil{
                                 print(error!.localizedDescription)
@@ -203,7 +147,6 @@ class MainScreenController: UIViewController{
                     } //observe data
                 }
             }
-            print(countRecipes,"countRecipes Test") //test
         }// observe
     }// end func
 
