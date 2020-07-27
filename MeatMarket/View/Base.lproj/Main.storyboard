@@ -636,6 +636,9 @@
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.26666666666666666" green="0.25490196078431371" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="aZM-uP-hWQ" firstAttribute="leading" secondItem="k6W-Gq-YGc" secondAttribute="leading" constant="23" id="KFR-l2-CBB"/>
+                                </constraints>
                             </view>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image_is_missing" translatesAutoresizingMaskIntoConstraints="NO" id="ehC-vb-hPN">
                                 <rect key="frame" x="10.5" y="77" width="393" height="163.5"/>
@@ -778,6 +781,7 @@
                             <constraint firstItem="ehC-vb-hPN" firstAttribute="centerX" secondItem="GxO-8H-bbF" secondAttribute="centerX" id="Dcm-TN-lop"/>
                             <constraint firstItem="pB5-ex-4tN" firstAttribute="height" secondItem="GxO-8H-bbF" secondAttribute="height" multiplier="0.25" id="FpS-Sh-4H4"/>
                             <constraint firstItem="ehC-vb-hPN" firstAttribute="centerY" secondItem="GxO-8H-bbF" secondAttribute="centerY" multiplier="0.35" id="Hlu-mq-lu1"/>
+                            <constraint firstItem="aZM-uP-hWQ" firstAttribute="height" secondItem="h1w-gt-KMN" secondAttribute="height" multiplier="0.7" id="Iko-DZ-GUj"/>
                             <constraint firstItem="DhU-nH-hSO" firstAttribute="centerX" secondItem="wII-dn-1qV" secondAttribute="centerX" id="IwE-ko-cTh"/>
                             <constraint firstItem="ehC-vb-hPN" firstAttribute="width" secondItem="GxO-8H-bbF" secondAttribute="width" multiplier="0.95" id="JDh-HM-hfz"/>
                             <constraint firstItem="wII-dn-1qV" firstAttribute="top" secondItem="DhU-nH-hSO" secondAttribute="bottom" constant="8" id="Kal-FV-z5K"/>
@@ -787,13 +791,13 @@
                             <constraint firstItem="h1w-gt-KMN" firstAttribute="leading" secondItem="GxO-8H-bbF" secondAttribute="leading" constant="118" id="U7a-XZ-OZ7"/>
                             <constraint firstItem="wII-dn-1qV" firstAttribute="centerY" secondItem="GxO-8H-bbF" secondAttribute="centerY" multiplier="1.53" id="YRl-Vf-l0b"/>
                             <constraint firstItem="k6W-Gq-YGc" firstAttribute="width" secondItem="GxO-8H-bbF" secondAttribute="width" id="Yhe-5j-WAl"/>
+                            <constraint firstItem="aZM-uP-hWQ" firstAttribute="centerY" secondItem="h1w-gt-KMN" secondAttribute="centerY" id="ZXY-Nb-gZ4"/>
                             <constraint firstItem="97l-U8-7cW" firstAttribute="top" secondItem="h1w-gt-KMN" secondAttribute="bottom" constant="1.5" id="dCz-Gj-lDp"/>
-                            <constraint firstItem="aZM-uP-hWQ" firstAttribute="centerY" secondItem="h1w-gt-KMN" secondAttribute="centerY" id="h2N-Ye-cQj"/>
                             <constraint firstItem="k6W-Gq-YGc" firstAttribute="centerY" secondItem="GxO-8H-bbF" secondAttribute="centerY" id="kr3-zU-iwi"/>
                             <constraint firstAttribute="bottom" secondItem="h1w-gt-KMN" secondAttribute="bottom" constant="617.5" id="lRP-rr-a62"/>
                             <constraint firstItem="ehC-vb-hPN" firstAttribute="height" secondItem="GxO-8H-bbF" secondAttribute="height" multiplier="0.2" id="lvD-RG-MAp"/>
-                            <constraint firstItem="h1w-gt-KMN" firstAttribute="leading" secondItem="aZM-uP-hWQ" secondAttribute="trailing" constant="16" id="ocS-NL-fE1"/>
                             <constraint firstItem="97l-U8-7cW" firstAttribute="centerX" secondItem="pB5-ex-4tN" secondAttribute="centerX" id="okt-1U-gwK"/>
+                            <constraint firstItem="h1w-gt-KMN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="aZM-uP-hWQ" secondAttribute="trailing" id="paO-3V-OZ6"/>
                             <constraint firstItem="pB5-ex-4tN" firstAttribute="centerY" secondItem="GxO-8H-bbF" secondAttribute="centerY" multiplier="0.92" id="rHz-ih-Zfm"/>
                             <constraint firstItem="h1w-gt-KMN" firstAttribute="top" secondItem="ehC-vb-hPN" secondAttribute="bottom" constant="8" id="utn-kD-oVg"/>
                         </constraints>
