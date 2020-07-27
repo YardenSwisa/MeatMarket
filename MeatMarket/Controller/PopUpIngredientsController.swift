@@ -76,7 +76,7 @@ class PopUpIngredientsController: UIViewController, UITableViewDelegate, UITable
         let cell = tableView.dequeueReusableCell(withIdentifier: "createIngredientsCellID") as! CreateRecipeIngredientsTableViewCell
         
         cell.backgroundColor = .clear
-        cell.labelCell.textColor = .darkGray
+        cell.labelCell.textColor = .white
         cell.labelCell.attributedText = finalText.prestyled()
         
         ingredientsTV.removeNoDataMassege()

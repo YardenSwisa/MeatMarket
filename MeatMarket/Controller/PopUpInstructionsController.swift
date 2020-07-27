@@ -74,7 +74,7 @@ class PopUpInstructionsController: UIViewController, UITableViewDelegate, UITabl
         let cell = tableView.dequeueReusableCell(withIdentifier: "createInstructionsCellID") as! CreateRecipeInstrcuctionTableViewCell
         
         cell.backgroundColor = .clear
-        cell.instructionCellLabel?.textColor = .darkGray
+        cell.instructionCellLabel?.textColor = .white
         cell.instructionCellLabel?.attributedText = finalText.prestyled()
         
         instructionsTV.removeNoDataMassege()
